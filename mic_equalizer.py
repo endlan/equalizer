@@ -212,17 +212,19 @@ class EqualizerGUI:
             label = "{}Hz".format(freq) if freq < 1000 else "{}kHz".format(freq // 1000)
             ttk.Label(col, text=label).pack()
 
-            slider = ttk.Scale(
-                col, from_=12, to=-12, orient="vertical", length=220,
-                command=lambda val, idx=i: self._on_slider_change(idx, val),
-            )
-            slider.set(0)
+            slider = ttk.Scale(col, from_=12, to=-12, orient="vertical", length=220)
             slider.pack()
             self.sliders.append(slider)
 
             val_label = ttk.Label(col, text="0 dB")
             val_label.pack()
             slider.value_label = val_label
+
+            # set nilai awal dulu, BARU pasang command callback,
+            # supaya slider.set(0) tidak memicu _on_slider_change
+            # sebelum self.sliders & value_label selesai disiapkan
+            slider.set(0)
+            slider.config(command=lambda val, idx=i: self._on_slider_change(idx, val))
 
     def _on_slider_change(self, band_index, value):
         gain = float(value)
