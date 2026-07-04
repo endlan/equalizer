@@ -29,7 +29,7 @@ jobs:
 
       - name: Build EXE with PyInstaller
         run: |
-          pyinstaller --onefile --noupx --name MicEqualizer `
+          pyinstaller --onefile --windowed --noupx --name MicEqualizer `
             --collect-all numpy `
             --collect-all scipy `
             --collect-all sounddevice `
