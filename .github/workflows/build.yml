@@ -28,7 +28,13 @@ jobs:
 
       - name: Build EXE with PyInstaller
         run: |
-          pyinstaller --onefile --windowed --name MicEqualizer mic_equalizer.py
+          pyinstaller --onefile --windowed --name MicEqualizer `
+            --collect-all numpy `
+            --collect-all scipy `
+            --collect-all sounddevice `
+            --hidden-import=scipy.signal `
+            --hidden-import=numpy.core._multiarray_umath `
+            mic_equalizer.py
 
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4
