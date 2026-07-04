@@ -29,7 +29,7 @@ jobs:
 
       - name: Build EXE with PyInstaller
         run: |
-          pyinstaller --onefile --windowed --noupx --name MicEqualizer `
+          pyinstaller --onedir --windowed --noupx --name MicEqualizer `
             --collect-all numpy `
             --collect-all scipy `
             --collect-all sounddevice `
@@ -37,8 +37,12 @@ jobs:
             --hidden-import=numpy.core._multiarray_umath `
             mic_equalizer.py
 
+      - name: Zip the output folder
+        run: |
+          Compress-Archive -Path dist\MicEqualizer\* -DestinationPath dist\MicEqualizer-portable.zip
+
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4
         with:
           name: MicEqualizer-windows
-          path: dist/MicEqualizer.exe
+          path: dist/MicEqualizer-portable.zip
