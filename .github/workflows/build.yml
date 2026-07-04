@@ -1,0 +1,37 @@
+name: Build MicEqualizer EXE
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'mic_equalizer.py'
+      - '.github/workflows/build.yml'
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sounddevice scipy numpy pyinstaller
+
+      - name: Build EXE with PyInstaller
+        run: |
+          pyinstaller --onefile --windowed --name MicEqualizer mic_equalizer.py
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MicEqualizer-windows
+          path: dist/MicEqualizer.exe
